@@ -26,7 +26,7 @@ The deploy script builds the CLI, validates all task packets, generates `public/
 
 ## GitHub Actions Deploy
 
-The workflow `.github/workflows/deploy-pages.yml` uses Wrangler Direct Upload. It requires these repository secrets:
+The workflow `.github/workflows/deploy-pages.yml` uses Wrangler Direct Upload and is manual-only by default. Run it from GitHub Actions after adding these repository secrets:
 
 ```text
 CLOUDFLARE_ACCOUNT_ID
@@ -54,4 +54,3 @@ Cloudflare's dashboard flow:
 5. Enter `spare-tokens.piccini.app`.
 
 If `piccini.app` is already managed by Cloudflare, Cloudflare should create the required DNS record automatically during the custom-domain setup.
-
