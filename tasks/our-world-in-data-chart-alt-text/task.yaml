@@ -1,0 +1,54 @@
+schema_version: "0.1"
+id: our-world-in-data-chart-alt-text
+title: Draft alt text improvements for Our World in Data chart embeds
+summary: Identify a small set of Our World in Data chart pages where chart meaning could be summarized more clearly for screen-reader users, and draft concise alt-text or caption improvements.
+cause_area: science
+project:
+  name: Our World in Data
+  url: https://ourworldindata.org/
+  repository: https://github.com/owid/owid-grapher-svgs
+  maintainers_contacted: false
+impact:
+  importance: Our World in Data is a major public science communication resource. Better chart descriptions improve access to evidence for more users.
+  tractability: The task is bounded to drafting text suggestions for a small number of public charts, not changing charting infrastructure.
+  neglectedness: Alternative text for complex data visualizations is valuable but labor-intensive and easy to defer.
+  beneficiaries:
+    - screen-reader users
+    - educators
+    - public science readers
+task:
+  type: docs-fix
+  difficulty: medium
+  estimated_minutes: 60
+  expected_outputs:
+    - chart URL list
+    - draft alt text or caption text
+    - rationale for each draft
+  allowed_actions:
+    - read public pages
+    - inspect chart metadata
+    - draft text suggestions
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands: []
+  evidence_required:
+    - chart URLs reviewed
+    - current text or metadata observed
+    - proposed replacement text under 280 characters per chart
+risk:
+  level: medium
+  notes: Scientific chart descriptions must not distort the evidence. Keep drafts descriptive and cite the exact chart reviewed.
+sources:
+  - label: Our World in Data
+    url: https://ourworldindata.org/
+  - label: OWID GitHub organization
+    url: https://github.com/owid
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+

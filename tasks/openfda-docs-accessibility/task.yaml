@@ -1,0 +1,55 @@
+schema_version: "0.1"
+id: openfda-docs-accessibility
+title: Accessibility pass for openFDA documentation pages
+summary: Review a small set of openFDA documentation pages for low-risk accessibility issues such as heading order, link text, image alt text, and table captions.
+cause_area: health
+project:
+  name: openFDA
+  url: https://open.fda.gov/
+  repository: https://github.com/FDA/open.fda.gov
+  maintainers_contacted: false
+impact:
+  importance: openFDA helps developers and researchers access public FDA datasets. Documentation accessibility improves public health data usability.
+  tractability: A static-page accessibility review is well-suited to AI assistance and can produce concrete findings with screenshots or DOM evidence.
+  neglectedness: Documentation accessibility issues are often not urgent enough to receive maintainer attention unless someone packages them clearly.
+  beneficiaries:
+    - public health researchers
+    - civic technologists
+    - developers using FDA datasets
+task:
+  type: accessibility-report
+  difficulty: low
+  estimated_minutes: 40
+  expected_outputs:
+    - accessibility findings report
+    - prioritized issue draft
+  allowed_actions:
+    - read public docs
+    - run non-invasive accessibility checks
+    - capture screenshots
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - npx @axe-core/cli https://open.fda.gov/apis/
+  evidence_required:
+    - page URLs checked
+    - issue screenshots or DOM snippets
+    - severity and recommended fix for each finding
+risk:
+  level: medium
+  notes: This is health-adjacent but does not provide medical advice or modify health data. Keep outputs limited to documentation accessibility.
+sources:
+  - label: openFDA
+    url: https://open.fda.gov/
+  - label: openFDA GitHub repository
+    url: https://github.com/FDA/open.fda.gov
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+

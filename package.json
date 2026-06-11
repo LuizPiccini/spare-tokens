@@ -1,0 +1,39 @@
+{
+  "name": "spare-tokens",
+  "version": "0.1.0",
+  "description": "AI-ready public-good tasks for spare model quota.",
+  "type": "module",
+  "bin": {
+    "spare": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "validate": "tsx src/cli.ts validate tasks",
+    "catalog": "tsx src/cli.ts catalog --out public/index.html",
+    "test": "vitest run src",
+    "deploy": "npm run build && npm run validate && npm run catalog && wrangler pages deploy public --project-name spare-tokens --branch main",
+    "pages:create": "wrangler pages project create spare-tokens --production-branch main"
+  },
+  "keywords": [
+    "effective-altruism",
+    "ai-agents",
+    "open-source",
+    "public-good",
+    "cli"
+  ],
+  "author": "Luiz Piccini",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^14.0.2",
+    "yaml": "^2.8.2",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "wrangler": "^4.99.0"
+  }
+}

@@ -1,0 +1,55 @@
+schema_version: "0.1"
+id: duckdb-alter-default-regression
+title: Verify DuckDB ALTER TABLE IF NOT EXISTS default rewrite regression
+summary: Produce a minimal, current-version repro for a possible DuckDB regression where ALTER TABLE ADD COLUMN IF NOT EXISTS with DEFAULT rewrites existing rows.
+cause_area: oss-infrastructure
+project:
+  name: DuckDB
+  url: https://duckdb.org/
+  repository: https://github.com/duckdb/duckdb
+  maintainers_contacted: false
+impact:
+  importance: Schema migrations are load-bearing infrastructure. Silent data rewrites in an idempotent migration pattern can corrupt application state.
+  tractability: The task is narrow, reproducible with a short SQL/Python script, and has a clear pass/fail result across DuckDB versions.
+  neglectedness: Small migration-edge regressions are easy to miss because they sit between database semantics, bindings, and application migration code.
+  beneficiaries:
+    - DuckDB users running application migrations
+    - maintainers triaging regressions
+task:
+  type: minimal-repro
+  difficulty: low
+  estimated_minutes: 45
+  expected_outputs:
+    - minimal reproduction script
+    - version matrix
+    - issue draft or upstream comment
+  allowed_actions:
+    - read public docs
+    - install released package versions
+    - run local repro scripts
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - python repro.py
+  evidence_required:
+    - exact DuckDB versions tested
+    - observed before/after table rows
+    - minimal script under 30 lines
+risk:
+  level: low
+  notes: This uses local throwaway databases and public packages only. It must not claim a confirmed upstream bug until reproduced on a current release.
+sources:
+  - label: DuckDB Python client docs
+    url: https://duckdb.org/docs/stable/clients/python/overview
+  - label: DuckDB GitHub issues
+    url: https://github.com/duckdb/duckdb/issues
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+

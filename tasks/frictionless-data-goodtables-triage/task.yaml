@@ -1,0 +1,55 @@
+schema_version: "0.1"
+id: frictionless-data-goodtables-triage
+title: Triage stale Goodtables issues in Frictionless Data
+summary: Review a small batch of stale Goodtables-related issues and identify which are duplicates, already fixed, still reproducible, or need maintainer clarification.
+cause_area: civic-tech
+project:
+  name: Frictionless Data
+  url: https://frictionlessdata.io/
+  repository: https://github.com/frictionlessdata/frictionless-py
+  maintainers_contacted: false
+impact:
+  importance: Frictionless Data tooling supports transparent, reusable tabular data in civic, scientific, and nonprofit contexts.
+  tractability: Issue triage can be done with public issue text, current docs, and small local reproductions.
+  neglectedness: Stale issue queues accumulate because triage is useful but rarely urgent.
+  beneficiaries:
+    - open data maintainers
+    - civic data users
+    - research data publishers
+task:
+  type: issue-triage
+  difficulty: medium
+  estimated_minutes: 60
+  expected_outputs:
+    - issue triage table
+    - suggested labels or closure notes
+    - minimal repro for any still-active bug
+  allowed_actions:
+    - read public issues
+    - run local package examples
+    - draft issue comments
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands:
+    - python -m pip install frictionless
+  evidence_required:
+    - issue URLs reviewed
+    - status classification for each issue
+    - reproduction command when classification is still-reproducible
+risk:
+  level: low
+  notes: This task touches public issue metadata and local package behavior only. It should not post comments automatically.
+sources:
+  - label: Frictionless Data
+    url: https://frictionlessdata.io/
+  - label: frictionless-py repository
+    url: https://github.com/frictionlessdata/frictionless-py
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+
