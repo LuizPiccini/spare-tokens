@@ -71,6 +71,9 @@ export function validateTask(yamlPath: string): TaskValidationResult {
     task.packet.files.prompts.codex,
     task.packet.files.prompts.claude,
     task.packet.files.prompts.gemini,
+    ...task.packet.artifacts
+      .map((artifact) => artifact.path)
+      .filter((path) => !path.startsWith("http://") && !path.startsWith("https://")),
   ];
 
   for (const filePath of requiredFiles) {

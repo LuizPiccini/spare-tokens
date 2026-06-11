@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: worldbank-api-example-verification
+title: Verify World Bank API documentation examples still work
+summary: Run a small set of public World Bank API documentation examples and report whether the documented URLs return the expected shape.
+cause_area: civic-tech
+project:
+  name: World Bank API documentation
+  url: https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information
+  maintainers_contacted: false
+impact:
+  importance: World Bank APIs support development, policy, and research workflows that depend on public data access.
+  tractability: A few documented example URLs can be fetched and checked for status, format, and basic response shape.
+  neglectedness: API docs examples can drift as endpoints evolve, and small verification reports are easy for maintainers to review.
+  beneficiaries:
+    - civic technologists
+    - researchers
+    - public data users
+task:
+  type: data-quality-check
+  difficulty: low
+  estimated_minutes: 45
+  expected_outputs:
+    - API example verification table
+    - issue draft for any stale examples
+  allowed_actions:
+    - read public API documentation
+    - fetch documented public example URLs
+    - inspect response status and shape
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - curl -I https://api.worldbank.org/v2/country
+  evidence_required:
+    - documented example URLs checked
+    - HTTP status and content type
+    - short observed response-shape note
+risk:
+  level: low
+  notes: This task checks public documentation examples only and should not interpret development indicators or make policy claims.
+sources:
+  - label: World Bank Developer Information
+    url: https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information
+  - label: World Bank Documents API
+    url: https://documents.worldbank.org/en/publication/documents-reports/api
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

@@ -6,7 +6,7 @@ cause_area: science
 project:
   name: Our World in Data
   url: https://ourworldindata.org/
-  repository: https://github.com/owid/owid-grapher-svgs
+  repository: https://github.com/owid/owid-grapher
   maintainers_contacted: false
 impact:
   importance: Our World in Data is a major public science communication resource. Better chart descriptions improve access to evidence for more users.
@@ -44,6 +44,24 @@ sources:
     url: https://ourworldindata.org/
   - label: OWID GitHub organization
     url: https://github.com/owid
+lifecycle:
+  state: published-upstream
+  last_updated: "2026-06-11"
+  notes: Draft alt text packet was published upstream as a public OWID Grapher issue.
+  upstream:
+    - label: OWID Grapher issue 6606
+      url: https://github.com/owid/owid-grapher/issues/6606
+      state: published
+      notes: Public issue contains four concise chart description suggestions.
+artifacts:
+  - label: Alt text drafts
+    path: artifacts/alt-text-drafts.md
+    type: report
+    description: Draft descriptions, current metadata, rationale, and character counts.
+  - label: Upstream status
+    path: artifacts/upstream-status.md
+    type: upstream-status
+    description: Published upstream issue and summary of chart URLs covered.
 files:
   context: context.md
   verification: verify.md
@@ -51,4 +69,3 @@ files:
     codex: prompts/codex.md
     claude: prompts/claude.md
     gemini: prompts/gemini.md
-

@@ -1,0 +1,1 @@
+Create a human-verifiable accessibility report for a small sample of Python docs pages. Include exact URLs, tool output, selectors or DOM snippets, and narrow recommended fixes. Do not contact maintainers.

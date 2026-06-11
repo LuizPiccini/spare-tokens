@@ -1,0 +1,1 @@
+Verify a small set of World Bank API documentation examples. Produce `artifacts/api-example-report.md` with source docs, exact URLs, status codes, content types, and response-shape notes. Do not interpret data values.

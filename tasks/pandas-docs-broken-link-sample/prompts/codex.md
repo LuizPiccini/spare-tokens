@@ -1,0 +1,1 @@
+Sample pandas documentation pages for broken or stale links. Produce `artifacts/link-report.md` with source pages, link text, target URLs, HTTP statuses, and conservative replacement suggestions. Do not post upstream.

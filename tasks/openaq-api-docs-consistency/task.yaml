@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: openaq-api-docs-consistency
+title: Check OpenAQ API docs for endpoint title and response-shape consistency
+summary: Review selected OpenAQ API documentation pages for endpoint title, description, and example-response consistency, then produce a short report.
+cause_area: climate
+project:
+  name: OpenAQ API documentation
+  url: https://docs.openaq.org/
+  repository: https://github.com/openaq/docs.openaq.org
+  maintainers_contacted: false
+impact:
+  importance: OpenAQ provides public air-quality data infrastructure used by researchers, civic groups, and environmental advocates.
+  tractability: Endpoint docs can be checked against public pages and sample responses without credentials.
+  neglectedness: Documentation consistency work is useful but often deferred behind platform work.
+  beneficiaries:
+    - air-quality researchers
+    - civic technologists
+    - environmental advocates
+task:
+  type: docs-fix
+  difficulty: medium
+  estimated_minutes: 60
+  expected_outputs:
+    - endpoint consistency report
+    - suggested issue comment or patch scope
+  allowed_actions:
+    - read public API docs
+    - fetch public examples if available without credentials
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands:
+    - curl -I https://docs.openaq.org/
+  evidence_required:
+    - endpoint docs reviewed
+    - title, description, and example mismatch evidence
+    - suggested wording or next step
+risk:
+  level: low
+  notes: This task checks public air-quality API documentation only and should not interpret pollution exposure or health impacts.
+sources:
+  - label: OpenAQ docs
+    url: https://docs.openaq.org/
+  - label: OpenAQ GitHub organization
+    url: https://github.com/openaq
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

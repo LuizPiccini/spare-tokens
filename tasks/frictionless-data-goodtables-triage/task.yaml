@@ -45,6 +45,24 @@ sources:
     url: https://frictionlessdata.io/
   - label: frictionless-py repository
     url: https://github.com/frictionlessdata/frictionless-py
+lifecycle:
+  state: artifact-ready
+  last_updated: "2026-06-11"
+  notes: Triage packet exists and is ready for maintainers; upstream issue/comment publishing is blocked by GitHub permissions.
+  upstream:
+    - label: frictionless-py repository
+      url: https://github.com/frictionlessdata/frictionless-py
+      state: blocked
+      notes: Connector returned 403 for both issue comment and issue creation attempts.
+artifacts:
+  - label: Issue triage packet
+    path: artifacts/triage.md
+    type: triage
+    description: Classification table and draft comments for Goodtables-related issues.
+  - label: Upstream status
+    path: artifacts/upstream-status.md
+    type: upstream-status
+    description: Publishing attempt status and current permission blocker.
 files:
   context: context.md
   verification: verify.md
@@ -52,4 +70,3 @@ files:
     codex: prompts/codex.md
     claude: prompts/claude.md
     gemini: prompts/gemini.md
-

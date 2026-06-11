@@ -1,0 +1,1 @@
+Review the Python documentation pages as an accessibility-report task. Keep the scope narrow, include reproducible evidence, and write the final artifact under `artifacts/report.md`. Do not publish comments or PRs.

@@ -1,10 +1,11 @@
 {
   "name": "spare-tokens",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "AI-ready public-good tasks for spare model quota.",
   "type": "module",
   "bin": {
-    "spare": "./dist/cli.js"
+    "spare": "./dist/cli.js",
+    "spare-tokens": "./dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -12,9 +13,37 @@
     "validate": "tsx src/cli.ts validate tasks",
     "catalog": "tsx src/cli.ts catalog --out public/index.html",
     "test": "vitest run src",
+    "prepack": "npm run build && npm run validate",
     "deploy": "npm run build && npm run validate && npm run catalog && wrangler pages deploy public --project-name spare-tokens --branch main",
     "pages:create": "wrangler pages project create spare-tokens --production-branch main"
   },
+  "files": [
+    "dist/catalog.d.ts",
+    "dist/catalog.js",
+    "dist/catalog.js.map",
+    "dist/cli.d.ts",
+    "dist/cli.js",
+    "dist/cli.js.map",
+    "dist/picker.d.ts",
+    "dist/picker.js",
+    "dist/picker.js.map",
+    "dist/prompts.d.ts",
+    "dist/prompts.js",
+    "dist/prompts.js.map",
+    "dist/schema.d.ts",
+    "dist/schema.js",
+    "dist/schema.js.map",
+    "dist/tasks.d.ts",
+    "dist/tasks.js",
+    "dist/tasks.js.map",
+    "tasks",
+    "docs",
+    "skills",
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "LICENSE-CONTENT.md"
+  ],
   "keywords": [
     "effective-altruism",
     "ai-agents",

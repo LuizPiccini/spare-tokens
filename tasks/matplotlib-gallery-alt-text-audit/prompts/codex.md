@@ -1,0 +1,1 @@
+Draft concise alt text or caption seeds for selected Matplotlib gallery examples. Produce `artifacts/alt-text-drafts.md` with URLs, current titles, proposed text, character counts, and rationale. Do not post upstream.

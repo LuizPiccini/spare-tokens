@@ -28,6 +28,35 @@ export const PrPolicySchema = z.enum([
 
 export const RiskLevelSchema = z.enum(["low", "medium", "high"]);
 
+export const LifecycleStateSchema = z.enum([
+  "open",
+  "artifact-ready",
+  "published-upstream",
+  "blocked",
+  "done",
+]);
+
+export const UpstreamStateSchema = z.enum([
+  "not-started",
+  "drafted",
+  "published",
+  "blocked",
+  "merged",
+  "closed",
+]);
+
+export const ArtifactTypeSchema = z.enum([
+  "repro",
+  "report",
+  "patch",
+  "triage",
+  "issue-draft",
+  "upstream-status",
+  "benchmark",
+  "data",
+  "other",
+]);
+
 export const TaskPacketSchema = z.object({
   schema_version: z.literal("0.1"),
   id: z
@@ -73,6 +102,41 @@ export const TaskPacketSchema = z.object({
       }),
     )
     .default([]),
+  lifecycle: z
+    .object({
+      state: LifecycleStateSchema,
+      last_updated: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD"),
+      owner: z.string().min(1).optional(),
+      notes: z.string().min(20),
+      upstream: z
+        .array(
+          z.object({
+            label: z.string().min(1),
+            url: z.string().url().optional(),
+            state: UpstreamStateSchema,
+            notes: z.string().min(10).optional(),
+          }),
+        )
+        .default([]),
+    })
+    .default({
+      state: "open",
+      last_updated: "2026-06-11",
+      notes: "Task has not yet been attempted by a contributor.",
+      upstream: [],
+    }),
+  artifacts: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+        path: z.string().min(1),
+        type: ArtifactTypeSchema,
+        description: z.string().min(20),
+      }),
+    )
+    .default([]),
   files: z.object({
     context: z.string().min(1),
     verification: z.string().min(1),
@@ -86,4 +150,3 @@ export const TaskPacketSchema = z.object({
 
 export type TaskPacket = z.infer<typeof TaskPacketSchema>;
 export type PromptTarget = keyof TaskPacket["files"]["prompts"];
-

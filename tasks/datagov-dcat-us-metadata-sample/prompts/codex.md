@@ -1,0 +1,1 @@
+Sample public Data.gov records and compare their metadata to DCAT-US guidance. Produce `artifacts/metadata-sample.md` with record IDs, fields checked, observed values, and conservative recommendations.

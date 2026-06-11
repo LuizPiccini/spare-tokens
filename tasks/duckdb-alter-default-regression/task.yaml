@@ -45,6 +45,31 @@ sources:
     url: https://duckdb.org/docs/stable/clients/python/overview
   - label: DuckDB GitHub issues
     url: https://github.com/duckdb/duckdb/issues
+lifecycle:
+  state: artifact-ready
+  last_updated: "2026-06-11"
+  notes: Reproduction and upstream-ready patch exist; publishing is blocked by missing fork or upstream write permission.
+  upstream:
+    - label: DuckDB issue 23209
+      url: https://github.com/duckdb/duckdb/issues/23209
+      state: published
+      notes: Public bug report is live under Luiz's account.
+    - label: DuckDB patch branch
+      state: blocked
+      notes: Local fix commit exists, but upstream push failed with 403 and no fork was available.
+artifacts:
+  - label: Reproduction script
+    path: artifacts/repro.py
+    type: repro
+    description: Minimal Python script that demonstrates before and after table rows.
+  - label: Reproduction report
+    path: artifacts/report.md
+    type: report
+    description: Version matrix and maintainer-facing issue draft for the DuckDB regression.
+  - label: Upstream status
+    path: artifacts/upstream-status.md
+    type: upstream-status
+    description: Current upstream issue, local patch commit, verification, and publishing blocker.
 files:
   context: context.md
   verification: verify.md
@@ -52,4 +77,3 @@ files:
     codex: prompts/codex.md
     claude: prompts/claude.md
     gemini: prompts/gemini.md
-

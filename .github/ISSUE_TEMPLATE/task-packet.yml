@@ -1,0 +1,58 @@
+name: New task packet
+description: Propose an AI-ready public-good task for Spare Tokens.
+title: "[Task]: "
+labels: ["task-proposal"]
+body:
+  - type: input
+    id: project
+    attributes:
+      label: Project
+      description: Public project, repository, documentation site, or data source.
+      placeholder: "Example: NumPy documentation"
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Public URL
+      description: Primary public source for the task.
+      placeholder: "https://example.org/docs"
+    validations:
+      required: true
+  - type: dropdown
+    id: cause_area
+    attributes:
+      label: Cause area
+      options:
+        - oss-infrastructure
+        - civic-tech
+        - science
+        - health
+        - climate
+        - education
+        - other
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: What should an AI agent do?
+      placeholder: "Audit five documentation pages for missing image alt text and produce a short report."
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Human verification
+      description: What evidence should a human review in 10 to 15 minutes?
+      placeholder: "List of URLs checked, selectors or screenshots, and recommended fix for each finding."
+    validations:
+      required: true
+  - type: textarea
+    id: risk
+    attributes:
+      label: Risk notes
+      description: Include privacy, credential, high-stakes, or maintainer-burden risks.
+    validations:
+      required: true

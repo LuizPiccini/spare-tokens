@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: pandas-docs-broken-link-sample
+title: Sample pandas documentation for broken or redirected links
+summary: Check a bounded set of pandas documentation pages for broken, redirected, or stale outbound links and produce a maintainer-friendly report.
+cause_area: science
+project:
+  name: pandas documentation
+  url: https://pandas.pydata.org/docs/
+  repository: https://github.com/pandas-dev/pandas
+  maintainers_contacted: false
+impact:
+  importance: pandas is foundational scientific and civic data infrastructure, and stale documentation links slow down learners and practitioners.
+  tractability: Link checks can be sampled with public pages, HTTP status evidence, and a short table.
+  neglectedness: Link rot is useful to fix but rarely urgent for maintainers unless someone packages evidence clearly.
+  beneficiaries:
+    - data analysts
+    - scientific Python users
+    - pandas maintainers
+task:
+  type: docs-fix
+  difficulty: low
+  estimated_minutes: 45
+  expected_outputs:
+    - broken-link report
+    - suggested replacement URLs where obvious
+  allowed_actions:
+    - read public documentation
+    - run link checks on a small URL sample
+    - draft an issue or patch suggestion
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - python -m pip install linkchecker
+  evidence_required:
+    - pages sampled
+    - HTTP status for each suspected broken link
+    - replacement URL or reason none is suggested
+risk:
+  level: low
+  notes: This task inspects public documentation links only and should avoid broad claims about pandas behavior.
+sources:
+  - label: pandas documentation
+    url: https://pandas.pydata.org/docs/
+  - label: pandas repository
+    url: https://github.com/pandas-dev/pandas
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

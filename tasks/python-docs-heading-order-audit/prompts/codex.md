@@ -1,0 +1,1 @@
+Audit the selected Python documentation pages for low-risk accessibility issues. Produce `artifacts/report.md` with URLs, commands, evidence, severity, and a concise issue draft. Do not post upstream.

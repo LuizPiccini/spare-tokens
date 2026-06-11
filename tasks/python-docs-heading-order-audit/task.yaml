@@ -1,0 +1,60 @@
+schema_version: "0.1"
+id: python-docs-heading-order-audit
+title: Audit Python documentation heading order on high-traffic pages
+summary: Check a small set of public Python documentation pages for heading-order and landmark issues, then produce a short accessibility report.
+cause_area: oss-infrastructure
+project:
+  name: Python documentation
+  url: https://docs.python.org/
+  repository: https://github.com/python/cpython
+  maintainers_contacted: false
+impact:
+  importance: Python documentation is core open-source infrastructure used by learners, educators, maintainers, and production engineers worldwide.
+  tractability: A bounded accessibility scan can be done with public pages, axe output, and DOM snippets without changing Python itself.
+  neglectedness: Documentation accessibility issues are valuable but often sit behind feature and release work.
+  beneficiaries:
+    - Python learners
+    - screen-reader users
+    - documentation maintainers
+task:
+  type: accessibility-report
+  difficulty: low
+  estimated_minutes: 45
+  expected_outputs:
+    - accessibility findings report
+    - issue draft with URLs and selectors
+  allowed_actions:
+    - read public documentation
+    - run non-invasive accessibility tooling
+    - capture DOM snippets
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - npx @axe-core/cli https://docs.python.org/3/
+  evidence_required:
+    - exact URLs checked
+    - tool version and command
+    - selector or DOM evidence for each finding
+risk:
+  level: low
+  notes: This task only inspects public documentation markup and should not make claims about Python language behavior.
+sources:
+  - label: Python documentation
+    url: https://docs.python.org/
+  - label: CPython repository
+    url: https://github.com/python/cpython
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

@@ -1,0 +1,1 @@
+Triage a small batch of public NASA API documentation issues or examples. Produce `artifacts/triage.md` with classifications, evidence, and low-volume reproduction notes where applicable. Do not post upstream.

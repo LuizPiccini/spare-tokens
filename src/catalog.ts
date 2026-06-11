@@ -4,23 +4,51 @@ import { LoadedTask } from "./tasks.js";
 
 export function renderCatalog(tasks: LoadedTask[]): string {
   const causeAreas = [...new Set(tasks.map((task) => task.packet.cause_area))];
+  const states = [...new Set(tasks.map((task) => task.packet.lifecycle.state))];
   const cards = tasks
     .map((task) => {
       const p = task.packet;
       const sources = p.sources
         .map((source) => `<a href="${escapeHtml(source.url)}">${escapeHtml(source.label)}</a>`)
         .join(", ");
+      const upstream = p.lifecycle.upstream
+        .map((item) => {
+          const label = item.url
+            ? `<a href="${escapeHtml(item.url)}">${escapeHtml(item.label)}</a>`
+            : escapeHtml(item.label);
+          const notes = item.notes ? `: ${escapeHtml(item.notes)}` : "";
+          return `<li>${label} <span class="state-chip">${escapeHtml(formatLabel(item.state))}</span>${notes}</li>`;
+        })
+        .join("");
+      const artifacts = p.artifacts
+        .map((artifact) => {
+          const target = artifact.path.startsWith("http")
+            ? `<a href="${escapeHtml(artifact.path)}">${escapeHtml(artifact.path)}</a>`
+            : `<code>${escapeHtml(artifact.path)}</code>`;
+          return `<li><strong>${escapeHtml(artifact.label)}</strong> <span class="state-chip">${escapeHtml(formatLabel(artifact.type))}</span><br>${target}<br><span>${escapeHtml(artifact.description)}</span></li>`;
+        })
+        .join("");
+      const taskPath = `tasks/${p.id}`;
+      const promptCommands = ["codex", "claude", "gemini"]
+        .map(
+          (target) =>
+            `<button class="copy-line" type="button">npx spare-tokens@latest pick --target ${target} --select ${escapeHtml(p.id)}</button>`,
+        )
+        .join("");
 
       return `
-        <article class="task-card">
+        <article class="task-card" data-cause="${escapeHtml(p.cause_area)}" data-state="${escapeHtml(p.lifecycle.state)}">
           <div class="meta">
             <span>${escapeHtml(formatLabel(p.cause_area))}</span>
             <span>${escapeHtml(formatLabel(p.task.type))}</span>
             <span>${p.task.estimated_minutes} min</span>
+            <span class="status">${escapeHtml(formatLabel(p.lifecycle.state))}</span>
           </div>
           <h2>${escapeHtml(p.title)}</h2>
           <p>${escapeHtml(p.summary)}</p>
           <dl class="task-details">
+            <dt>Status</dt>
+            <dd>${escapeHtml(p.lifecycle.notes)} Last updated ${escapeHtml(p.lifecycle.last_updated)}.</dd>
             <dt>Impact</dt>
             <dd>${escapeHtml(p.impact.importance)}</dd>
             <dt>Verification</dt>
@@ -31,6 +59,10 @@ export function renderCatalog(tasks: LoadedTask[]): string {
             <dd>${escapeHtml(formatLabel(p.task.pr_policy))}</dd>
             <dt>Risk</dt>
             <dd>${escapeHtml(formatLabel(p.risk.level))}: ${escapeHtml(p.risk.notes)}</dd>
+            ${upstream ? `<dt>Upstream</dt><dd><ul class="compact-list">${upstream}</ul></dd>` : ""}
+            ${artifacts ? `<dt>Artifacts</dt><dd><ul class="compact-list">${artifacts}</ul></dd>` : ""}
+            <dt>Prompts</dt>
+            <dd><div class="prompt-lines">${promptCommands}</div></dd>
             ${sources ? `<dt>Sources</dt><dd>${sources}</dd>` : ""}
           </dl>
         </article>
@@ -186,6 +218,11 @@ export function renderCatalog(tasks: LoadedTask[]): string {
       border-radius: 6px;
       padding: 3px 6px;
     }
+    .meta .status,
+    .state-chip {
+      border-color: rgba(245, 166, 35, 0.52);
+      color: var(--amber);
+    }
     h2 {
       font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
       margin: 0 0 8px;
@@ -213,6 +250,47 @@ export function renderCatalog(tasks: LoadedTask[]): string {
       margin: -5px 0 5px;
       color: var(--ink-soft);
     }
+    .compact-list {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .compact-list li {
+      margin: 0 0 8px;
+    }
+    .state-chip {
+      border: 1px solid rgba(245, 166, 35, 0.52);
+      border-radius: 5px;
+      display: inline-block;
+      font-size: 11px;
+      margin-left: 4px;
+      padding: 1px 5px;
+      text-transform: uppercase;
+    }
+    code {
+      color: var(--ink);
+      overflow-wrap: anywhere;
+    }
+    .prompt-lines {
+      display: grid;
+      gap: 6px;
+    }
+    .copy-line {
+      background: rgba(13, 27, 42, 0.72);
+      border: 1px solid var(--edge-strong);
+      border-radius: 6px;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      padding: 7px 8px;
+      text-align: left;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .copy-line[data-copied="true"] {
+      border-color: rgba(245, 166, 35, 0.84);
+      color: var(--amber);
+    }
     strong {
       color: var(--amber);
       font-weight: 500;
@@ -237,13 +315,15 @@ export function renderCatalog(tasks: LoadedTask[]): string {
     <div class="inner">
       <p class="eyebrow">Effective altruist task packets for AI agents</p>
       <h1>Spare Tokens</h1>
-      <p class="tagline">AI-ready public-good tasks for spare model quota. Built around impact, tractability, and fast human verification.</p>
+      <p class="tagline">AI-ready public-good tasks for spare model quota. Built around impact, tractability, fast human verification, and a top-five picker for agents.</p>
       <div class="measurement" aria-hidden="true"></div>
       <div class="stats">
         <span class="pill">${tasks.length} tasks</span>
         <span class="pill">${causeAreas.map(formatLabel).join(" / ")}</span>
+        <span class="pill">${states.map(formatLabel).join(" / ")}</span>
         <span class="pill">Artifact-first</span>
         <span class="pill">Human-verifiable</span>
+        <span class="pill">CLI-pickable</span>
       </div>
     </div>
   </header>
@@ -267,12 +347,39 @@ export function renderCatalog(tasks: LoadedTask[]): string {
           <dt><strong>Low maintainer burden</strong></dt>
           <dd>Default output is a reviewable artifact, not unsolicited automated PR spam.</dd>
         </div>
+        <div class="criterion">
+          <dt><strong>Lifecycle-aware</strong></dt>
+          <dd>Tasks show whether work is open, artifact-ready, published upstream, blocked, or done.</dd>
+        </div>
+        <div class="criterion">
+          <dt><strong>Agent-pickable</strong></dt>
+          <dd><code>npx spare-tokens@latest pick</code> ranks open work and exports the selected prompt.</dd>
+        </div>
       </dl>
     </div>
   </section>
   <main>
     ${cards}
   </main>
+  <script>
+    for (const button of document.querySelectorAll(".copy-line")) {
+      button.addEventListener("click", async () => {
+        const text = button.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          button.dataset.copied = "true";
+          const original = text;
+          button.textContent = "Copied: " + original;
+          window.setTimeout(() => {
+            button.dataset.copied = "false";
+            button.textContent = original;
+          }, 1400);
+        } catch {
+          button.dataset.copied = "false";
+        }
+      });
+    }
+  </script>
 </body>
 </html>
 `;
@@ -294,6 +401,6 @@ function escapeHtml(value: string): string {
 function formatLabel(value: string): string {
   return value
     .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => (word === "oss" ? "OSS" : word.charAt(0).toUpperCase() + word.slice(1)))
     .join(" ");
 }

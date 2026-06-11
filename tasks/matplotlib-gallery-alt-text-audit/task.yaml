@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: matplotlib-gallery-alt-text-audit
+title: Draft alt text seeds for selected Matplotlib gallery examples
+summary: Review a small set of Matplotlib gallery examples and draft concise chart descriptions that could seed alt text or captions.
+cause_area: science
+project:
+  name: Matplotlib gallery
+  url: https://matplotlib.org/stable/gallery/index.html
+  repository: https://github.com/matplotlib/matplotlib
+  maintainers_contacted: false
+impact:
+  importance: Matplotlib examples teach data visualization patterns to a large scientific and educational audience.
+  tractability: A small sample of gallery examples can be described from visible plots and page titles without changing code.
+  neglectedness: Describing generated plots is labor-intensive and often deferred in documentation workflows.
+  beneficiaries:
+    - screen-reader users
+    - scientific Python learners
+    - documentation maintainers
+task:
+  type: docs-fix
+  difficulty: medium
+  estimated_minutes: 60
+  expected_outputs:
+    - gallery URL list
+    - draft alt text or caption seeds
+    - rationale for each draft
+  allowed_actions:
+    - read public gallery pages
+    - inspect visible plots
+    - draft descriptive text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands: []
+  evidence_required:
+    - gallery URLs reviewed
+    - visible plot summary for each draft
+    - proposed text under 280 characters each
+risk:
+  level: low
+  notes: Drafts must describe visible plot structure only and avoid scientific claims not present in the example page.
+sources:
+  - label: Matplotlib gallery
+    url: https://matplotlib.org/stable/gallery/index.html
+  - label: Matplotlib repository
+    url: https://github.com/matplotlib/matplotlib
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

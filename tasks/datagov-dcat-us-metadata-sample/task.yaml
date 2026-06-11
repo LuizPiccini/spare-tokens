@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: datagov-dcat-us-metadata-sample
+title: Sample Data.gov records for DCAT-US metadata completeness
+summary: Compare a small sample of Data.gov catalog records against DCAT-US documentation and report missing or weak metadata fields.
+cause_area: civic-tech
+project:
+  name: Data.gov metadata
+  url: https://resources.data.gov/resources/dcat-us3/
+  repository: https://github.com/GSA/data.gov
+  maintainers_contacted: false
+impact:
+  importance: Better open-data metadata improves discoverability and reuse of public datasets by civic, research, and nonprofit users.
+  tractability: A small sample can be checked against public DCAT-US guidance without needing privileged data access.
+  neglectedness: Metadata quality work is important but often distributed across many agencies and records.
+  beneficiaries:
+    - civic data users
+    - government data publishers
+    - researchers
+task:
+  type: data-quality-check
+  difficulty: medium
+  estimated_minutes: 75
+  expected_outputs:
+    - sampled-record metadata table
+    - recommended metadata improvements
+  allowed_actions:
+    - read public metadata docs
+    - query public catalog records
+    - compare fields against documented guidance
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands:
+    - curl https://api.gsa.gov/technology/datagov/v4/
+  evidence_required:
+    - sampled record URLs or IDs
+    - DCAT-US fields checked
+    - missing or weak field evidence
+risk:
+  level: low
+  notes: This task checks public metadata only and should not judge policy quality or dataset contents.
+sources:
+  - label: DCAT-US Schema v3.0
+    url: https://resources.data.gov/resources/dcat-us3/
+  - label: Data.gov Catalog API
+    url: https://resources.data.gov/catalog-api/
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

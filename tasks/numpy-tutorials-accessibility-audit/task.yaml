@@ -1,0 +1,60 @@
+schema_version: "0.1"
+id: numpy-tutorials-accessibility-audit
+title: Audit NumPy tutorial pages for image and notebook accessibility
+summary: Review a small set of NumPy tutorial pages for missing image descriptions, unlabeled notebook outputs, or heading issues, then draft a report.
+cause_area: education
+project:
+  name: NumPy tutorials
+  url: https://numpy.org/numpy-tutorials/
+  repository: https://github.com/numpy/numpy-tutorials
+  maintainers_contacted: false
+impact:
+  importance: NumPy tutorials are educational infrastructure for scientific computing learners and instructors.
+  tractability: Tutorial pages are public and can be sampled for specific accessibility issues with clear evidence.
+  neglectedness: Notebook-derived educational pages can accumulate accessibility gaps because visual output is central to the format.
+  beneficiaries:
+    - scientific Python learners
+    - instructors
+    - screen-reader users
+task:
+  type: accessibility-report
+  difficulty: medium
+  estimated_minutes: 60
+  expected_outputs:
+    - tutorial accessibility report
+    - draft issue with examples
+  allowed_actions:
+    - read public tutorial pages
+    - inspect page markup
+    - run non-invasive accessibility checks
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands:
+    - npx @axe-core/cli https://numpy.org/numpy-tutorials/
+  evidence_required:
+    - tutorial URLs reviewed
+    - evidence for each image or notebook-output issue
+    - suggested text or fix direction
+risk:
+  level: low
+  notes: This task is limited to educational documentation accessibility and should not alter scientific content.
+sources:
+  - label: NumPy tutorials
+    url: https://numpy.org/numpy-tutorials/
+  - label: numpy-tutorials repository
+    url: https://github.com/numpy/numpy-tutorials
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

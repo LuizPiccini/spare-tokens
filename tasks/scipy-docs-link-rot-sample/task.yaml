@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: scipy-docs-link-rot-sample
+title: Sample SciPy documentation for link rot and stale references
+summary: Check a small set of SciPy documentation pages for broken links, stale external references, and redirect chains, then produce a concise report.
+cause_area: science
+project:
+  name: SciPy documentation
+  url: https://docs.scipy.org/doc/scipy/
+  repository: https://github.com/scipy/scipy
+  maintainers_contacted: false
+impact:
+  importance: SciPy documentation supports scientific and engineering work where stale references slow down learning and maintenance.
+  tractability: A bounded link sample can be checked with public docs and reproducible HTTP status evidence.
+  neglectedness: Link rot is low-glamour maintenance work that benefits from clear, small reports.
+  beneficiaries:
+    - scientists
+    - engineers
+    - SciPy maintainers
+task:
+  type: docs-fix
+  difficulty: low
+  estimated_minutes: 45
+  expected_outputs:
+    - link rot report
+    - suggested replacements where obvious
+  allowed_actions:
+    - read public documentation
+    - run link checks
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - python -m pip install linkchecker
+  evidence_required:
+    - SciPy pages sampled
+    - target URLs and HTTP status codes
+    - recommendation per broken or stale link
+risk:
+  level: low
+  notes: This task checks documentation links only and should not make claims about SciPy APIs or scientific validity.
+sources:
+  - label: SciPy documentation
+    url: https://docs.scipy.org/doc/scipy/
+  - label: SciPy repository
+    url: https://github.com/scipy/scipy
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

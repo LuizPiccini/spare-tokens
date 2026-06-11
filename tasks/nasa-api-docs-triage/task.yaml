@@ -1,0 +1,60 @@
+schema_version: "0.1"
+id: nasa-api-docs-triage
+title: Triage stale NASA API documentation issues and examples
+summary: Review a small batch of public NASA API documentation issues or examples and classify which need reproduction, clarification, or closure.
+cause_area: science
+project:
+  name: NASA API docs
+  url: https://api.nasa.gov/
+  repository: https://github.com/nasa/api-docs
+  maintainers_contacted: false
+impact:
+  importance: NASA public APIs support science education, public outreach, and open data projects.
+  tractability: Public documentation issues and examples can be reviewed without credentials when limited to metadata and endpoint availability.
+  neglectedness: API documentation issue queues often contain stale reports that benefit from careful triage.
+  beneficiaries:
+    - science educators
+    - open data developers
+    - NASA API users
+task:
+  type: issue-triage
+  difficulty: medium
+  estimated_minutes: 60
+  expected_outputs:
+    - issue triage table
+    - reproduction notes for any still-active public example
+    - suggested maintainer comments
+  allowed_actions:
+    - read public issues
+    - fetch public documentation examples
+    - draft issue comments
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands:
+    - curl -I https://api.nasa.gov/
+  evidence_required:
+    - issue or example URLs reviewed
+    - classification with one-sentence evidence
+    - reproduction command for any still-active endpoint problem
+risk:
+  level: low
+  notes: This task checks public API documentation only and should not require API keys, credentials, or scientific interpretation.
+sources:
+  - label: NASA Open APIs
+    url: https://api.nasa.gov/
+  - label: nasa/api-docs repository
+    url: https://github.com/nasa/api-docs
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

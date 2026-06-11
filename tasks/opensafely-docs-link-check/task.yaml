@@ -1,0 +1,59 @@
+schema_version: "0.1"
+id: opensafely-docs-link-check
+title: Check OpenSAFELY documentation for broken links in onboarding pages
+summary: Review a small set of OpenSAFELY onboarding documentation pages for broken or stale links and produce a conservative report.
+cause_area: health
+project:
+  name: OpenSAFELY documentation
+  url: https://docs.opensafely.org/
+  repository: https://github.com/opensafely/documentation
+  maintainers_contacted: false
+impact:
+  importance: OpenSAFELY documentation supports reproducible, transparent health research workflows.
+  tractability: Onboarding pages are public and can be checked for link integrity without accessing health data.
+  neglectedness: Broken onboarding links can block new contributors and users but are easy to overlook.
+  beneficiaries:
+    - health researchers
+    - OpenSAFELY users
+    - documentation maintainers
+task:
+  type: docs-fix
+  difficulty: low
+  estimated_minutes: 45
+  expected_outputs:
+    - onboarding link-check report
+    - issue draft if broken links are found
+  allowed_actions:
+    - read public documentation
+    - run link checks
+    - draft issue text
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 10
+  commands:
+    - python -m pip install linkchecker
+  evidence_required:
+    - onboarding pages checked
+    - broken or redirected target URLs
+    - HTTP status and recommendation
+risk:
+  level: medium
+  notes: This is health-adjacent documentation work only; do not access health data or provide clinical advice.
+sources:
+  - label: OpenSAFELY documentation
+    url: https://docs.opensafely.org/
+  - label: OpenSAFELY documentation repository
+    url: https://github.com/opensafely/documentation
+lifecycle:
+  state: open
+  last_updated: "2026-06-11"
+  notes: New v0.4 seed task; no artifact has been produced yet.
+  upstream: []
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md

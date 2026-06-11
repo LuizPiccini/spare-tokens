@@ -1,0 +1,1 @@
+Check a bounded SciPy documentation sample for broken links and stale references. Save `artifacts/link-rot-report.md` with reproducible HTTP evidence and conservative recommendations. Do not post upstream.
