@@ -15,6 +15,17 @@ npx tsx src/cli.ts export tasks/<task-id> --target claude
 npx tsx src/cli.ts export tasks/<task-id> --target gemini
 ```
 
+To import fresh maintainer-labeled GitHub issues first:
+
+```bash
+npx tsx src/cli.ts sources
+npx tsx src/cli.ts start --target codex
+npx tsx src/cli.ts ingest github --source openrefine-good-first-issue --limit 3 --out tasks
+npx tsx src/cli.ts pick tasks --target codex
+```
+
+Imported issue packets are starting points, not upstream permission. Work toward a small tested change when tractable, run adversarial review, and ask for human approval before posting comments or opening PRs.
+
 ## Complete A Task
 
 Create artifacts under:
@@ -52,6 +63,8 @@ artifacts:
 ```
 
 Use `published-upstream` only when a public upstream issue, PR, discussion, or comment exists. Use `blocked` only when the next useful action requires maintainer input, credentials, or a permission the contributor does not have.
+
+Use `pr-ready` when a tested branch, patch, or diff plus PR draft is ready for human approval but has not been posted upstream.
 
 ## Add A New Task
 

@@ -1,0 +1,91 @@
+schema_version: "0.1"
+id: opensafely-core-job-server-issue-1261
+title: Add some explanation to "Releases" page
+summary: "Turn maintainer-signaled GitHub issue #1261 in
+  opensafely-core/job-server into a small, tested contribution or a clear stop
+  report."
+cause_area: health
+project:
+  name: OpenSAFELY Job Server
+  url: https://www.opensafely.org
+  repository: https://github.com/opensafely-core/job-server
+  maintainers_contacted: false
+impact:
+  importance: OpenSAFELY supports secure, reproducible health research workflows
+    used for public-health analysis.
+  tractability: Maintainer-labeled issues usually provide a bounded public context
+    for triage, docs, tests, or reproduction work.
+  neglectedness: Open issues with contributor-friendly labels can sit unattempted
+    even when a small artifact would help maintainers.
+  beneficiaries:
+    - health researchers
+    - public-health analysts
+    - maintainers
+task:
+  type: docs-fix
+  difficulty: low
+  estimated_minutes: 75
+  expected_outputs:
+    - small code, docs, or test change when tractable
+    - test output and adversarial review notes
+    - PR title and body draft for human approval
+  allowed_actions:
+    - read public GitHub issue text
+    - clone the public repository
+    - run local tests, docs builds, linters, or reproduction commands
+    - create a local branch with the smallest useful change
+    - run an adversarial self-review before proposing upstream action
+    - prepare PR title and body for human review
+    - open a PR only after human approval
+  pr_policy: allowed-after-human-review
+verification:
+  human_minutes: 15
+  commands:
+    - curl -L https://api.github.com/repos/opensafely-core/job-server/issues/1261
+    - git ls-remote https://github.com/opensafely-core/job-server.git HEAD
+  evidence_required:
+    - current upstream issue URL, title, and labels
+    - commands attempted and relevant output snippets
+    - local artifact with findings, uncertainty, and recommended next action
+risk:
+  level: medium
+  notes: This is developer-facing OSS work in a sensitive domain. Do not use
+    private data, make clinical claims, or post upstream without human review.
+sources:
+  - label: "GitHub issue #1261"
+    url: https://github.com/opensafely-core/job-server/issues/1261
+  - label: opensafely-core/job-server repository
+    url: https://github.com/opensafely-core/job-server
+lifecycle:
+  state: open
+  last_updated: 2026-06-11
+  notes: Imported from a maintainer-labeled GitHub issue; ready for a
+    human-selected agent run.
+  upstream:
+    - label: "GitHub issue #1261"
+      url: https://github.com/opensafely-core/job-server/issues/1261
+      state: published
+      notes: Existing upstream issue; no Spare Tokens artifact has been posted.
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+origin:
+  type: github-issue
+  source_id: opensafely-job-server-good-first-issue
+  repository: opensafely-core/job-server
+  issue_number: 1261
+  issue_url: https://github.com/opensafely-core/job-server/issues/1261
+  labels:
+    - documentation
+    - enhancement
+    - good first issue
+    - outputs
+  signal_labels:
+    - documentation
+    - good first issue
+  imported_at: 2026-06-11

@@ -1,0 +1,88 @@
+schema_version: "0.1"
+id: scikit-learn-scikit-learn-issue-22827
+title: Improve tests by using global_random_seed fixture to make them less
+  seed-sensitive
+summary: "Turn maintainer-signaled GitHub issue #22827 in
+  scikit-learn/scikit-learn into a small, reviewable artifact."
+cause_area: science
+project:
+  name: scikit-learn
+  url: https://scikit-learn.org
+  repository: https://github.com/scikit-learn/scikit-learn
+  maintainers_contacted: false
+impact:
+  importance: scikit-learn is core scientific and machine-learning infrastructure
+    used by researchers, civic technologists, educators, and applied teams.
+  tractability: Maintainer-labeled issues usually provide a bounded public context
+    for triage, docs, tests, or reproduction work.
+  neglectedness: Open issues with contributor-friendly labels can sit unattempted
+    even when a small artifact would help maintainers.
+  beneficiaries:
+    - scientific Python users
+    - machine-learning practitioners
+    - maintainers
+task:
+  type: test-gap
+  difficulty: medium
+  estimated_minutes: 90
+  expected_outputs:
+    - issue triage or reproduction artifact
+    - recommended next action for a human reviewer
+  allowed_actions:
+    - read public GitHub issue text
+    - clone the public repository
+    - run local tests, docs builds, linters, or reproduction commands
+    - create a local artifact with findings and suggested next action
+    - draft upstream text without posting it
+  pr_policy: do-not-open-pr
+verification:
+  human_minutes: 15
+  commands:
+    - curl -L https://api.github.com/repos/scikit-learn/scikit-learn/issues/22827
+    - git ls-remote https://github.com/scikit-learn/scikit-learn.git HEAD
+  evidence_required:
+    - current upstream issue URL, title, and labels
+    - commands attempted and relevant output snippets
+    - local artifact with findings, uncertainty, and recommended next action
+risk:
+  level: low
+  notes: This task uses public issue and repository data only and defaults to a
+    local artifact before any upstream action.
+sources:
+  - label: "GitHub issue #22827"
+    url: https://github.com/scikit-learn/scikit-learn/issues/22827
+  - label: scikit-learn/scikit-learn repository
+    url: https://github.com/scikit-learn/scikit-learn
+lifecycle:
+  state: blocked
+  last_updated: 2026-06-11
+  notes: Imported issue needs human re-scoping before use because upstream labels
+    include Hard and Meta-issue.
+  upstream:
+    - label: "GitHub issue #22827"
+      url: https://github.com/scikit-learn/scikit-learn/issues/22827
+      state: published
+      notes: Existing upstream issue; no Spare Tokens artifact has been posted.
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+origin:
+  type: github-issue
+  source_id: scikit-learn-help-wanted
+  repository: scikit-learn/scikit-learn
+  issue_number: 22827
+  issue_url: https://github.com/scikit-learn/scikit-learn/issues/22827
+  labels:
+    - help wanted
+    - Low Priority
+    - Hard
+    - module:test-suite
+    - Meta-issue
+  signal_labels:
+    - help wanted
+  imported_at: 2026-06-11

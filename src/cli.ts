@@ -5,6 +5,10 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeCatalog } from "./catalog.js";
 import {
+  fetchIssuesForSources,
+  writeGeneratedTasks,
+} from "./github.js";
+import {
   formatPickList,
   rankOpenTasks,
   resolveRankedSelection,
@@ -12,15 +16,22 @@ import {
 } from "./picker.js";
 import { exportPrompt } from "./prompts.js";
 import { CauseAreaSchema, PromptTarget, RiskLevelSchema } from "./schema.js";
+import {
+  GitHubIssueSource,
+  GitHubIssueSourceSchema,
+  loadSourceRegistry,
+  selectGitHubSources,
+} from "./sources.js";
 import { findTaskYamlPaths, loadValidTasks, validateTask } from "./tasks.js";
 
 const program = new Command();
 const defaultTasksPath = join(packageRoot(), "tasks");
+const defaultSourcesPath = join(packageRoot(), "sources.yaml");
 
 program
   .name("spare")
   .description("Pick, validate, and export AI-ready public-good tasks.")
-  .version("0.5.0");
+  .version("0.7.0");
 
 program
   .command("validate")
@@ -85,6 +96,196 @@ program
     writeCatalog(tasks, options.out);
     console.log(`Wrote ${options.out} with ${tasks.length} task(s).`);
   });
+
+program
+  .command("sources")
+  .description("List curated GitHub issue sources.")
+  .argument("[registry]", "source registry YAML path", defaultSourcesPath)
+  .action((registryPath: string) => {
+    const registry = loadSourceRegistry(registryPath);
+    for (const source of registry.github) {
+      console.log(
+        [
+          source.id,
+          source.repository,
+          source.cause_area,
+          source.labels.join(","),
+        ].join("\t"),
+      );
+    }
+  });
+
+program
+  .command("start")
+  .description("Start the human-in-the-loop Spare Tokens agent workflow.")
+  .option("-t, --target <target>", "codex, claude, or gemini", "codex")
+  .option("--source <id>", "source id from the registry, or all", "all")
+  .option("--registry <path>", "source registry YAML path", defaultSourcesPath)
+  .option("--out <path>", "local task packet output root", ".spare-tokens/tasks")
+  .option("--import-limit <number>", "maximum issues to import per source", "1")
+  .option("-l, --limit <number>", "number of ranked tasks to show", "5")
+  .option("--cause <cause>", "filter by cause area")
+  .option("--max-risk <risk>", "filter by maximum risk: low, medium, or high")
+  .option("--no-import", "skip GitHub import and rank existing local or bundled tasks")
+  .option("--overwrite", "overwrite existing generated task directories")
+  .option("--json", "emit machine-readable JSON")
+  .action(
+    async (options: {
+      target: string;
+      source: string;
+      registry: string;
+      out: string;
+      importLimit: string;
+      limit: string;
+      cause?: string;
+      maxRisk?: string;
+      import?: boolean;
+      overwrite?: boolean;
+      json?: boolean;
+    }) => {
+      const target = parseTarget(options.target);
+      const importLimit = parseLimit(options.importLimit);
+      const limit = parseLimit(options.limit);
+      const causeArea = options.cause ? parseCauseArea(options.cause) : undefined;
+      const maxRisk = options.maxRisk ? parseRisk(options.maxRisk) : undefined;
+
+      let written = 0;
+      let skipped = 0;
+      const warnings: string[] = [];
+      if (options.import !== false) {
+        const sources = selectGitHubSources(
+          loadSourceRegistry(options.registry),
+          options.source,
+        );
+        const generated = await fetchIssuesForSources(sources, {
+          limitPerSource: importLimit,
+          token: process.env.GITHUB_TOKEN,
+          continueOnError: true,
+          onWarning: (message) => warnings.push(message),
+        });
+        const results = writeGeneratedTasks(generated, options.out, {
+          overwrite: Boolean(options.overwrite),
+        });
+        written = results.filter((result) => result.written).length;
+        skipped = results.filter((result) => result.skipped).length;
+      }
+
+      let taskRoot = existsSync(options.out) ? options.out : defaultTasksPath;
+      let tasks = loadValidTasks(taskRoot);
+      if (tasks.length === 0 && taskRoot !== defaultTasksPath) {
+        taskRoot = defaultTasksPath;
+        tasks = loadValidTasks(taskRoot);
+      }
+      const ranked = rankOpenTasks(tasks, { causeArea, maxRisk });
+      if (ranked.length === 0) {
+        throw new Error("No open tasks matched the start workflow filters.");
+      }
+      const top = ranked.slice(0, limit);
+
+      if (options.json) {
+        console.log(
+          JSON.stringify(
+            {
+              target,
+              task_root: taskRoot,
+              imported: { written, skipped, warnings },
+              tasks: top.map(summarizeRankedTask),
+              select_command: `${selectionCommandBase(taskRoot)} pick ${taskRoot} --target ${target} --select <rank-or-task-id>`,
+            },
+            null,
+            2,
+          ),
+        );
+        return;
+      }
+
+      console.log(
+        formatStartOutput({
+          target,
+          taskRoot,
+          limit,
+          written,
+          skipped,
+          warnings,
+          ranked: top,
+        }),
+      );
+    },
+  );
+
+const ingest = program.command("ingest").description("Import external public-good tasks.");
+
+ingest
+  .command("github")
+  .description("Import maintainer-labeled public GitHub issues as task packets.")
+  .argument("[registry]", "source registry YAML path", defaultSourcesPath)
+  .option("--source <id>", "source id from the registry, or all", "all")
+  .option("--repo <owner/repo>", "ad hoc GitHub repository to import from")
+  .option("--labels <labels>", "comma-separated labels for --repo", "good first issue,help wanted")
+  .option("--cause <cause>", "cause area for --repo imports", "oss-infrastructure")
+  .option("--project-name <name>", "project name for --repo imports")
+  .option("--project-url <url>", "project URL for --repo imports")
+  .option("--limit <number>", "maximum issues to import per source", "2")
+  .option("--out <path>", "task packet output root", "tasks")
+  .option("--dry-run", "print candidate task ids without writing files")
+  .option("--overwrite", "overwrite existing generated task directories")
+  .action(
+    async (
+      registryPath: string,
+      options: {
+        source: string;
+        repo?: string;
+        labels: string;
+        cause: string;
+        projectName?: string;
+        projectUrl?: string;
+        limit: string;
+        out: string;
+        dryRun?: boolean;
+        overwrite?: boolean;
+      },
+    ) => {
+      const limitPerSource = parseLimit(options.limit);
+      const sources = options.repo
+        ? [buildAdHocGitHubSource(options)]
+        : selectGitHubSources(loadSourceRegistry(registryPath), options.source);
+      const generated = await fetchIssuesForSources(sources, {
+        limitPerSource,
+        token: process.env.GITHUB_TOKEN,
+        continueOnError: true,
+        onWarning: (message) => console.error(`[WARN] ${message}`),
+      });
+
+      if (generated.length === 0) {
+        console.log("No matching open GitHub issues found.");
+        return;
+      }
+
+      if (options.dryRun) {
+        for (const task of generated) {
+          console.log(
+            `${task.id}\t${task.source.repository}#${task.issue.number}\t${task.issue.title}`,
+          );
+        }
+        return;
+      }
+
+      const results = writeGeneratedTasks(generated, options.out, {
+        overwrite: Boolean(options.overwrite),
+      });
+      for (const result of results) {
+        const status = result.skipped ? "SKIP" : "WRITE";
+        console.log(
+          `[${status}] ${result.task.id} (${result.task.source.repository}#${result.task.issue.number})`,
+        );
+      }
+      const written = results.filter((result) => result.written).length;
+      const skipped = results.filter((result) => result.skipped).length;
+      console.log(
+        `Imported ${written} GitHub issue task(s); skipped ${skipped} existing task(s).`,
+      );
+    },
+  );
 
 program
   .command("pick")
@@ -171,7 +372,7 @@ program
     },
   );
 
-program.parse();
+await program.parseAsync();
 
 function parseTarget(value: string): PromptTarget {
   if (value === "codex" || value === "claude" || value === "gemini") {
@@ -202,6 +403,87 @@ function parseLimit(value: string): number {
     throw new Error(`Limit must be an integer from 1 to 50: ${value}`);
   }
   return parsed;
+}
+
+function buildAdHocGitHubSource(options: {
+  repo?: string;
+  labels: string;
+  cause: string;
+  projectName?: string;
+  projectUrl?: string;
+}): GitHubIssueSource {
+  if (!options.repo) {
+    throw new Error("--repo is required for ad hoc GitHub imports.");
+  }
+  const cause = parseCauseArea(options.cause);
+  const labels = options.labels
+    .split(",")
+    .map((label) => label.trim())
+    .filter(Boolean);
+  if (labels.length === 0) {
+    throw new Error("--labels must include at least one label.");
+  }
+
+  return GitHubIssueSourceSchema.parse({
+    id: `adhoc-${options.repo.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`,
+    repository: options.repo,
+    project_name: options.projectName ?? options.repo,
+    project_url: options.projectUrl ?? `https://github.com/${options.repo}`,
+    cause_area: cause,
+    labels,
+    importance:
+      "This ad hoc GitHub import targets an open-source project selected by the user for public-good contribution.",
+    beneficiaries: ["maintainers", "users"],
+  });
+}
+
+function formatStartOutput(options: {
+  target: PromptTarget;
+  taskRoot: string;
+  limit: number;
+  written: number;
+  skipped: number;
+  warnings: string[];
+  ranked: ReturnType<typeof rankOpenTasks>;
+}): string {
+  const lines = [
+    "Spare Tokens v0.7 agent workflow",
+    "",
+    `Task root: ${options.taskRoot}`,
+    `Imported: ${options.written} new, ${options.skipped} existing`,
+  ];
+
+  if (options.warnings.length > 0) {
+    lines.push("", "Warnings:");
+    for (const warning of options.warnings) {
+      lines.push(`- ${warning}`);
+    }
+  }
+
+  lines.push(
+    "",
+    formatPickList(options.ranked, {
+      target: options.target,
+      limit: options.limit,
+      commandName: selectionCommandBase(options.taskRoot),
+      pathArgument: options.taskRoot,
+    }),
+    "",
+    "After the user picks a task, export the selected prompt and execute it end to end:",
+    "- re-check the upstream issue",
+    "- clone or open the upstream repo",
+    "- make the smallest useful change",
+    "- run targeted tests or docs checks",
+    "- run the adversarial review checklist",
+    "- prepare PR title/body",
+    "- ask before pushing or opening the PR unless the user already approved PR submission for that selected task",
+  );
+
+  return lines.join("\n");
+}
+
+function selectionCommandBase(taskRoot: string): string {
+  return "npx spare-tokens@latest";
 }
 
 function resolveTaskInput(input: string): string {

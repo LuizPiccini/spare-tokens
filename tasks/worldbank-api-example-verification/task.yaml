@@ -45,11 +45,18 @@ sources:
   - label: World Bank Documents API
     url: https://documents.worldbank.org/en/publication/documents-reports/api
 lifecycle:
-  state: open
+  state: done
   last_updated: "2026-06-11"
-  notes: New v0.4 seed task; no artifact has been produced yet.
-  upstream: []
-artifacts: []
+  notes: Human review accepted the verification report; no stale examples were found and no upstream action is useful.
+  upstream:
+    - label: World Bank API documentation
+      state: not-started
+      notes: No stale sampled examples were found, so no upstream issue was drafted or posted.
+artifacts:
+  - label: API example verification report
+    path: artifacts/api-example-report.md
+    type: report
+    description: Six documented World Bank API examples with status, content type, response shape, and stale-example assessment.
 files:
   context: context.md
   verification: verify.md

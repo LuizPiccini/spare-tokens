@@ -1,0 +1,153 @@
+schema_version: "0.1"
+github:
+  - id: scikit-learn-help-wanted
+    repository: scikit-learn/scikit-learn
+    project_name: scikit-learn
+    project_url: https://scikit-learn.org
+    cause_area: science
+    labels:
+      - help wanted
+    task_type: issue-triage
+    difficulty: medium
+    estimated_minutes: 90
+    human_minutes: 15
+    risk_level: low
+    importance: scikit-learn is core scientific and machine-learning infrastructure used by researchers, civic technologists, educators, and applied teams.
+    beneficiaries:
+      - scientific Python users
+      - machine-learning practitioners
+      - maintainers
+    notes: Prefer bounded reproductions, tests, documentation clarifications, and issue narrowing over broad algorithm design work.
+
+  - id: scipy-good-first-issue
+    repository: scipy/scipy
+    project_name: SciPy
+    project_url: https://scipy.org
+    cause_area: science
+    labels:
+      - good first issue
+    task_type: minimal-repro
+    difficulty: low
+    estimated_minutes: 75
+    human_minutes: 15
+    risk_level: low
+    importance: SciPy underpins scientific computing, engineering, education, and research workflows across many public-good domains.
+    beneficiaries:
+      - researchers
+      - scientific Python users
+      - maintainers
+    notes: Favor tasks with small reproductions, benchmark evidence, documentation gaps, or targeted tests.
+
+  - id: matplotlib-good-first-issue
+    repository: matplotlib/matplotlib
+    project_name: Matplotlib
+    project_url: https://matplotlib.org
+    cause_area: science
+    labels:
+      - Good first issue
+    task_type: issue-triage
+    difficulty: low
+    estimated_minutes: 60
+    human_minutes: 15
+    risk_level: low
+    importance: Matplotlib is a core visualization library for science, education, government, and data journalism.
+    beneficiaries:
+      - researchers
+      - educators
+      - data visualization users
+    notes: Favor documentation, examples, accessibility, and small testable behavior reports.
+
+  - id: jupyter-notebook-help-wanted
+    repository: jupyter/notebook
+    project_name: Jupyter Notebook
+    project_url: https://jupyter.org
+    cause_area: science
+    labels:
+      - help wanted
+    task_type: issue-triage
+    difficulty: medium
+    estimated_minutes: 90
+    human_minutes: 15
+    risk_level: low
+    importance: Jupyter notebooks support reproducible research, scientific education, and public-interest data analysis.
+    beneficiaries:
+      - researchers
+      - students
+      - educators
+    notes: Prefer reproducible UI or docs issues with current version checks and clear screenshots or command output.
+
+  - id: openrefine-good-first-issue
+    repository: OpenRefine/OpenRefine
+    project_name: OpenRefine
+    project_url: https://openrefine.org
+    cause_area: civic-tech
+    labels:
+      - good first issue
+    task_type: issue-triage
+    difficulty: low
+    estimated_minutes: 75
+    human_minutes: 15
+    risk_level: low
+    importance: OpenRefine helps journalists, researchers, libraries, and civic data teams clean and reconcile messy public data.
+    beneficiaries:
+      - civic data users
+      - researchers
+      - librarians
+    notes: Favor issues that can be reproduced locally or narrowed with screenshots, fixture data, or documentation notes.
+
+  - id: openfoodfacts-good-first-issue
+    repository: openfoodfacts/openfoodfacts-server
+    project_name: Open Food Facts
+    project_url: https://world.openfoodfacts.org
+    cause_area: health
+    labels:
+      - good first issue
+    task_type: issue-triage
+    difficulty: low
+    estimated_minutes: 75
+    human_minutes: 15
+    risk_level: medium
+    importance: Open Food Facts provides public food product data that supports consumer transparency, research, and public-health tooling.
+    beneficiaries:
+      - public food data users
+      - consumer-health researchers
+      - maintainers
+    notes: Keep work developer-facing. Do not make nutritional or medical recommendations.
+
+  - id: opensafely-job-server-good-first-issue
+    repository: opensafely-core/job-server
+    project_name: OpenSAFELY Job Server
+    project_url: https://www.opensafely.org
+    cause_area: health
+    labels:
+      - good first issue
+    task_type: issue-triage
+    difficulty: low
+    estimated_minutes: 75
+    human_minutes: 15
+    risk_level: medium
+    importance: OpenSAFELY supports secure, reproducible health research workflows used for public-health analysis.
+    beneficiaries:
+      - health researchers
+      - public-health analysts
+      - maintainers
+    notes: Restrict work to public code, docs, tests, and developer workflow artifacts. Do not use patient data.
+
+  - id: openstreetmap-website-good-first-issue
+    repository: openstreetmap/openstreetmap-website
+    project_name: OpenStreetMap Website
+    project_url: https://www.openstreetmap.org
+    cause_area: civic-tech
+    labels:
+      - good first issue
+    task_type: issue-triage
+    difficulty: low
+    estimated_minutes: 75
+    human_minutes: 15
+    risk_level: low
+    importance: OpenStreetMap infrastructure supports humanitarian mapping, local civic data, transport, climate, and accessibility workflows.
+    beneficiaries:
+      - civic technologists
+      - mapping contributors
+      - public-interest data users
+    notes: Favor docs, tests, UI reproductions, or issue clarification artifacts that do not require production credentials.

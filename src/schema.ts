@@ -31,6 +31,7 @@ export const RiskLevelSchema = z.enum(["low", "medium", "high"]);
 export const LifecycleStateSchema = z.enum([
   "open",
   "artifact-ready",
+  "pr-ready",
   "published-upstream",
   "blocked",
   "done",
@@ -51,10 +52,28 @@ export const ArtifactTypeSchema = z.enum([
   "patch",
   "triage",
   "issue-draft",
+  "pr-draft",
   "upstream-status",
   "benchmark",
   "data",
   "other",
+]);
+
+export const OriginSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("github-issue"),
+    source_id: z.string().min(1).optional(),
+    repository: z
+      .string()
+      .regex(/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/, "Use owner/repo"),
+    issue_number: z.number().int().positive(),
+    issue_url: z.string().url(),
+    labels: z.array(z.string().min(1)).default([]),
+    signal_labels: z.array(z.string().min(1)).default([]),
+    imported_at: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD"),
+  }),
 ]);
 
 export const TaskPacketSchema = z.object({
@@ -146,6 +165,7 @@ export const TaskPacketSchema = z.object({
       gemini: z.string().min(1),
     }),
   }),
+  origin: OriginSchema.optional(),
 });
 
 export type TaskPacket = z.infer<typeof TaskPacketSchema>;

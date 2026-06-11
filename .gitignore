@@ -2,8 +2,8 @@ node_modules/
 dist/
 coverage/
 public/index.html
+.spare-tokens/
 *.tsbuildinfo
 .env
 .env.*
 !.env.example
-

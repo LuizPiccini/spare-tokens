@@ -115,6 +115,67 @@ describe("TaskPacketSchema", () => {
     expect(parsed.artifacts[0].type).toBe("report");
   });
 
+  it("accepts PR-ready lifecycle and PR draft artifacts", () => {
+    const parsed = TaskPacketSchema.parse({
+      schema_version: "0.1",
+      id: "pr-ready-task",
+      title: "PR ready task packet",
+      summary: "A valid public-good task packet with a prepared PR draft.",
+      cause_area: "oss-infrastructure",
+      project: {
+        name: "Example",
+        url: "https://example.com",
+      },
+      impact: {
+        importance: "This helps maintainers review a small tested contribution.",
+        tractability: "The output can be checked with public information only.",
+        neglectedness: "Small prepared contributions are often left unfinished.",
+        beneficiaries: ["maintainers"],
+      },
+      task: {
+        type: "docs-fix",
+        difficulty: "low",
+        estimated_minutes: 45,
+        expected_outputs: ["tested patch", "PR draft"],
+        allowed_actions: ["prepare a PR draft"],
+        pr_policy: "allowed-after-human-review",
+      },
+      verification: {
+        human_minutes: 10,
+        evidence_required: ["diff", "test output", "PR draft"],
+      },
+      risk: {
+        level: "low",
+        notes: "No private data, credentials, or high-stakes decision is involved.",
+      },
+      lifecycle: {
+        state: "pr-ready",
+        last_updated: "2026-06-11",
+        notes: "A tested change and PR draft are ready for human approval.",
+      },
+      artifacts: [
+        {
+          label: "PR draft",
+          path: "artifacts/pr-draft.md",
+          type: "pr-draft",
+          description: "A PR title and body that a reviewer can inspect.",
+        },
+      ],
+      files: {
+        context: "context.md",
+        verification: "verify.md",
+        prompts: {
+          codex: "prompts/codex.md",
+          claude: "prompts/claude.md",
+          gemini: "prompts/gemini.md",
+        },
+      },
+    });
+
+    expect(parsed.lifecycle.state).toBe("pr-ready");
+    expect(parsed.artifacts[0].type).toBe("pr-draft");
+  });
+
   it("fails validation when a referenced local artifact is missing", () => {
     const dir = mkdtempSync(join(tmpdir(), "spare-task-"));
     mkdirSync(join(dir, "prompts"));

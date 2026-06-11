@@ -1,11 +1,11 @@
 {
   "name": "spare-tokens",
-  "version": "0.5.0",
+  "version": "0.7.0",
   "description": "AI-ready public-good tasks for spare model quota.",
   "type": "module",
   "bin": {
-    "spare": "./dist/cli.js",
-    "spare-tokens": "./dist/cli.js"
+    "spare": "dist/cli.js",
+    "spare-tokens": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -24,6 +24,9 @@
     "dist/cli.d.ts",
     "dist/cli.js",
     "dist/cli.js.map",
+    "dist/github.d.ts",
+    "dist/github.js",
+    "dist/github.js.map",
     "dist/picker.d.ts",
     "dist/picker.js",
     "dist/picker.js.map",
@@ -33,10 +36,14 @@
     "dist/schema.d.ts",
     "dist/schema.js",
     "dist/schema.js.map",
+    "dist/sources.d.ts",
+    "dist/sources.js",
+    "dist/sources.js.map",
     "dist/tasks.d.ts",
     "dist/tasks.js",
     "dist/tasks.js.map",
     "tasks",
+    "sources.yaml",
     "docs",
     "skills",
     "README.md",

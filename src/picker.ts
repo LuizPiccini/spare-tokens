@@ -91,15 +91,22 @@ export function formatPickList(
   },
 ): string {
   const commandName = options.commandName ?? "spare";
-  const path = options.pathArgument ? ` ${options.pathArgument}` : "";
+  const path = options.pathArgument ? ` ${formatCommandArg(options.pathArgument)}` : "";
   const rows = rankedTasks.slice(0, options.limit).map((ranked) => {
     const packet = ranked.task.packet;
+    const origin =
+      packet.origin?.type === "github-issue"
+        ? `   Source: GitHub ${packet.origin.repository}#${packet.origin.issue_number}`
+        : undefined;
     return [
       `${ranked.rank}. ${packet.id}`,
       `   ${packet.title}`,
+      origin,
       `   Cause: ${formatLabel(packet.cause_area)} | Risk: ${formatLabel(packet.risk.level)} | Agent time: ${packet.task.estimated_minutes} min | Human review: ${packet.verification.human_minutes} min`,
       `   Score: ${ranked.score} | ${ranked.reasons.join("; ")}`,
-    ].join("\n");
+    ]
+      .filter(Boolean)
+      .join("\n");
   });
 
   return [
@@ -124,6 +131,7 @@ export function summarizeRankedTask(ranked: RankedTask): {
   human_minutes: number;
   score: number;
   reasons: string[];
+  origin?: TaskPacket["origin"];
 } {
   const packet = ranked.task.packet;
   return {
@@ -137,6 +145,7 @@ export function summarizeRankedTask(ranked: RankedTask): {
     human_minutes: packet.verification.human_minutes,
     score: ranked.score,
     reasons: ranked.reasons,
+    origin: packet.origin,
   };
 }
 
@@ -190,6 +199,19 @@ function scoreTask(packet: TaskPacket): { score: number; reasons: string[] } {
     reasons.push("source-backed");
   }
 
+  if (packet.origin?.type === "github-issue") {
+    score += 3;
+    reasons.push("maintainer-signaled GitHub issue");
+    if (packet.origin.signal_labels.length > 0) {
+      score += 2;
+      reasons.push(`signal labels: ${packet.origin.signal_labels.join(", ")}`);
+    }
+    if (hasBroadOrHardLabel(packet.origin.labels)) {
+      score -= 6;
+      reasons.push("broad or hard upstream label");
+    }
+  }
+
   return { score, reasons };
 }
 
@@ -207,4 +229,20 @@ function formatLabel(value: string): string {
     .split("-")
     .map((word) => (word === "oss" ? "OSS" : word.charAt(0).toUpperCase() + word.slice(1)))
     .join(" ");
+}
+
+function hasBroadOrHardLabel(labels: string[]): boolean {
+  const normalized = labels.map((label) => label.toLowerCase());
+  return normalized.some(
+    (label) =>
+      label === "hard" ||
+      label === "meta-issue" ||
+      label === "needs design" ||
+      label === "needs decision" ||
+      label === "blocked",
+  );
+}
+
+function formatCommandArg(value: string): string {
+  return /\s/.test(value) ? `"${value.replaceAll('"', '\\"')}"` : value;
 }

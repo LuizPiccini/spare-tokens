@@ -24,6 +24,8 @@ A completed artifact should answer:
 - What commands were run?
 - What changed or what was found?
 - What should a human verify?
+- If a PR is intended, what title/body is proposed and what tests support it?
+- Did the contributor run adversarial review against correctness, scope, maintainer burden, and domain risk?
 - Was anything published upstream?
 - If upstream publication was blocked, what permission or maintainer input is needed?
 
@@ -31,6 +33,7 @@ A completed artifact should answer:
 
 - `open`: no artifact exists yet.
 - `artifact-ready`: local artifact exists and verification instructions are clear.
+- `pr-ready`: a tested branch, patch, or diff plus PR draft is ready for human approval.
 - `published-upstream`: a public upstream issue, PR, discussion, or comment exists.
 - `blocked`: useful next action requires permission, credentials, or maintainer input.
 - `done`: upstream accepted the result or a human reviewer decided no more action is useful.

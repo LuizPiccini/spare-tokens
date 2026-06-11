@@ -1,0 +1,88 @@
+schema_version: "0.1"
+id: matplotlib-matplotlib-issue-17479
+title: Add thumbnails for tutorials/gallery where missing
+summary: "Turn maintainer-signaled GitHub issue #17479 in matplotlib/matplotlib
+  into a small, tested contribution or a clear stop report."
+cause_area: science
+project:
+  name: Matplotlib
+  url: https://matplotlib.org
+  repository: https://github.com/matplotlib/matplotlib
+  maintainers_contacted: false
+impact:
+  importance: Matplotlib is a core visualization library for science, education,
+    government, and data journalism.
+  tractability: Maintainer-labeled issues usually provide a bounded public context
+    for triage, docs, tests, or reproduction work.
+  neglectedness: Open issues with contributor-friendly labels can sit unattempted
+    even when a small artifact would help maintainers.
+  beneficiaries:
+    - researchers
+    - educators
+    - data visualization users
+task:
+  type: docs-fix
+  difficulty: low
+  estimated_minutes: 60
+  expected_outputs:
+    - small code, docs, or test change when tractable
+    - test output and adversarial review notes
+    - PR title and body draft for human approval
+  allowed_actions:
+    - read public GitHub issue text
+    - clone the public repository
+    - run local tests, docs builds, linters, or reproduction commands
+    - create a local branch with the smallest useful change
+    - run an adversarial self-review before proposing upstream action
+    - prepare PR title and body for human review
+    - open a PR only after human approval
+  pr_policy: allowed-after-human-review
+verification:
+  human_minutes: 15
+  commands:
+    - curl -L https://api.github.com/repos/matplotlib/matplotlib/issues/17479
+    - git ls-remote https://github.com/matplotlib/matplotlib.git HEAD
+  evidence_required:
+    - current upstream issue URL, title, and labels
+    - commands attempted and relevant output snippets
+    - local artifact with findings, uncertainty, and recommended next action
+risk:
+  level: low
+  notes: This task uses public issue and repository data only and defaults to a
+    local artifact before any upstream action.
+sources:
+  - label: "GitHub issue #17479"
+    url: https://github.com/matplotlib/matplotlib/issues/17479
+  - label: matplotlib/matplotlib repository
+    url: https://github.com/matplotlib/matplotlib
+lifecycle:
+  state: open
+  last_updated: 2026-06-11
+  notes: Imported from a maintainer-labeled GitHub issue; ready for a
+    human-selected agent run.
+  upstream:
+    - label: "GitHub issue #17479"
+      url: https://github.com/matplotlib/matplotlib/issues/17479
+      state: published
+      notes: Existing upstream issue; no Spare Tokens artifact has been posted.
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+origin:
+  type: github-issue
+  source_id: matplotlib-good-first-issue
+  repository: matplotlib/matplotlib
+  issue_number: 17479
+  issue_url: https://github.com/matplotlib/matplotlib/issues/17479
+  labels:
+    - Documentation
+    - Good first issue
+  signal_labels:
+    - Documentation
+    - Good first issue
+  imported_at: 2026-06-11

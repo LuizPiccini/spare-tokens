@@ -8,21 +8,25 @@ The core bet is not that AI can solve everything. The bet is narrower:
 
 > There are many public-good tasks where a well-scoped AI attempt plus a clear verification packet has positive expected value.
 
-## v0.5 Scope
+## v0.7 Scope
 
-v0.5 is the first agent-picker milestone. A user can tell an AI agent to run one command, review the top open tasks, choose one, and receive the task prompt:
+v0.7 adds the first Codex-style agent workflow. A user can ask an agent to run Spare Tokens, review five maintainer-signaled issues, pick one, and let the agent work toward a tested PR draft:
 
 - A machine-readable task packet format.
 - A TypeScript CLI to validate, rank, pick, and export task packets.
 - Prompt export for Codex, Claude, and Gemini-style agents.
 - A generated static catalog page.
 - A GitHub Action that validates tasks.
-- Lifecycle states for open, artifact-ready, published, blocked, and done tasks.
+- Lifecycle states for open, artifact-ready, PR-ready, published, blocked, and done tasks.
 - Artifact references for repros, reports, issue drafts, patches, and upstream status notes.
 - Contributor docs, a task proposal template, and a review rubric.
 - A `pick` command that ranks open tasks and exports a selected prompt by rank or task id.
+- A curated `sources.yaml` registry of science, civic-tech, and health OSS repositories.
+- An `ingest github` command that imports maintainer-labeled issues as normal task packets.
+- A `start` command that imports, ranks, and prints the next selection command for agents.
+- Generated GitHub prompts that ask agents to re-check the issue, clone the repo, make a narrow change, run tests, run adversarial review, and prepare a PR draft.
 
-Spare Tokens does not call any model, automate consumer subscriptions, open PRs by default, or route requests through user accounts.
+Spare Tokens does not call any model, automate consumer subscriptions, or route requests through user accounts. It lets agents prepare PRs, but upstream posting requires human approval unless the user explicitly approved PR submission for the selected task.
 
 ## Why This Exists
 
@@ -49,6 +53,7 @@ The initial catalog is deliberately small. A task belongs in v0 when it satisfie
 Use the public command path:
 
 ```bash
+npx spare-tokens@latest start --target codex
 npx spare-tokens@latest pick --target codex
 npx spare-tokens@latest pick --target codex --select 1
 ```
@@ -64,6 +69,7 @@ For global install after the package is published:
 
 ```bash
 npm install -g spare-tokens
+spare start --target codex
 spare pick --target codex
 spare pick --target codex --select 1
 ```
@@ -78,17 +84,30 @@ npm run build
 ```bash
 npm run validate
 npm run catalog
+npx tsx src/cli.ts start --target codex --no-import
 npx tsx src/cli.ts pick tasks --target codex
 npx tsx src/cli.ts pick tasks --target codex --select 1
 npx tsx src/cli.ts list tasks
 npx tsx src/cli.ts export tasks/duckdb-alter-default-regression --target codex
 ```
 
+Import fresh maintainer-labeled GitHub issues:
+
+```bash
+npx tsx src/cli.ts sources
+npx tsx src/cli.ts ingest github --source openrefine-good-first-issue --limit 3 --out tasks
+npx tsx src/cli.ts ingest github --repo scikit-learn/scikit-learn --labels "help wanted" --cause science --limit 3 --out tasks
+npx tsx src/cli.ts pick tasks --target codex
+```
+
 After build:
 
 ```bash
 node dist/cli.js validate tasks
+node dist/cli.js start --target codex --no-import
 node dist/cli.js pick tasks --target codex
+node dist/cli.js sources
+node dist/cli.js ingest github --source scipy-good-first-issue --limit 2 --out tasks
 node dist/cli.js catalog --out public/index.html
 ```
 
@@ -97,15 +116,34 @@ node dist/cli.js catalog --out public/index.html
 Tell your agent:
 
 ```text
-Use Spare Tokens. Run `npx spare-tokens@latest pick --target codex`, show me the top five open tasks, ask which one I want, then run the same command with `--select <rank-or-task-id>` and work from the exported prompt.
+Please run Spare Tokens.
 ```
+
+The agent should run:
+
+```bash
+npx spare-tokens@latest start --target codex
+```
+
+It should show the top five tasks, ask which one you want, export the selected prompt, then execute the prompt end to end: re-check the issue, clone or open the upstream repo, make the smallest useful change, run tests, run adversarial review, prepare a PR title/body, and ask before opening the PR unless you already approved PR submission for that selected task.
 
 For machine-readable agent flows:
 
 ```bash
+npx spare-tokens@latest start --target codex --json
 npx spare-tokens@latest pick --target codex --json
 npx spare-tokens@latest pick --target codex --select 1 --json
 ```
+
+For fresh GitHub issue sourcing:
+
+```bash
+npx spare-tokens@latest sources
+npx spare-tokens@latest ingest github --source all --limit 1 --out spare-tokens-tasks
+npx spare-tokens@latest pick spare-tokens-tasks --target codex
+```
+
+The GitHub importer uses public issue search. Set `GITHUB_TOKEN` if GitHub rate-limits unauthenticated requests.
 
 ## Task Packet
 
@@ -132,6 +170,7 @@ Tasks use these states:
 
 - `open`: ready for someone to attempt.
 - `artifact-ready`: a local artifact exists and is ready for review.
+- `pr-ready`: a tested branch or patch and PR draft are ready for human approval.
 - `published-upstream`: an upstream issue, PR, discussion, or comment exists.
 - `blocked`: useful next action needs permission, credentials, or maintainer input.
 - `done`: a human-verifiable terminal state has been reached.

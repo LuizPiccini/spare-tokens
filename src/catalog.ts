@@ -349,7 +349,7 @@ export function renderCatalog(tasks: LoadedTask[]): string {
         </div>
         <div class="criterion">
           <dt><strong>Lifecycle-aware</strong></dt>
-          <dd>Tasks show whether work is open, artifact-ready, published upstream, blocked, or done.</dd>
+          <dd>Tasks show whether work is open, artifact-ready, PR-ready, published upstream, blocked, or done.</dd>
         </div>
         <div class="criterion">
           <dt><strong>Agent-pickable</strong></dt>

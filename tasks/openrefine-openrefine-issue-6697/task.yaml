@@ -1,0 +1,90 @@
+schema_version: "0.1"
+id: openrefine-openrefine-issue-6697
+title: Recon suggest widget: enable middle-click to open URL in new tab without
+  selecting
+summary: "Turn maintainer-signaled GitHub issue #6697 in OpenRefine/OpenRefine
+  into a small, tested contribution or a clear stop report."
+cause_area: civic-tech
+project:
+  name: OpenRefine
+  url: https://openrefine.org
+  repository: https://github.com/OpenRefine/OpenRefine
+  maintainers_contacted: false
+impact:
+  importance: OpenRefine helps journalists, researchers, libraries, and civic data
+    teams clean and reconcile messy public data.
+  tractability: Maintainer-labeled issues usually provide a bounded public context
+    for triage, docs, tests, or reproduction work.
+  neglectedness: Open issues with contributor-friendly labels can sit unattempted
+    even when a small artifact would help maintainers.
+  beneficiaries:
+    - civic data users
+    - researchers
+    - librarians
+task:
+  type: issue-triage
+  difficulty: low
+  estimated_minutes: 75
+  expected_outputs:
+    - small code, docs, or test change when tractable
+    - test output and adversarial review notes
+    - PR title and body draft for human approval
+  allowed_actions:
+    - read public GitHub issue text
+    - clone the public repository
+    - run local tests, docs builds, linters, or reproduction commands
+    - create a local branch with the smallest useful change
+    - run an adversarial self-review before proposing upstream action
+    - prepare PR title and body for human review
+    - open a PR only after human approval
+  pr_policy: allowed-after-human-review
+verification:
+  human_minutes: 15
+  commands:
+    - curl -L https://api.github.com/repos/OpenRefine/OpenRefine/issues/6697
+    - git ls-remote https://github.com/OpenRefine/OpenRefine.git HEAD
+  evidence_required:
+    - current upstream issue URL, title, and labels
+    - commands attempted and relevant output snippets
+    - local artifact with findings, uncertainty, and recommended next action
+risk:
+  level: low
+  notes: This task uses public issue and repository data only and defaults to a
+    local artifact before any upstream action.
+sources:
+  - label: "GitHub issue #6697"
+    url: https://github.com/OpenRefine/OpenRefine/issues/6697
+  - label: OpenRefine/OpenRefine repository
+    url: https://github.com/OpenRefine/OpenRefine
+lifecycle:
+  state: open
+  last_updated: 2026-06-11
+  notes: Imported from a maintainer-labeled GitHub issue; ready for a
+    human-selected agent run.
+  upstream:
+    - label: "GitHub issue #6697"
+      url: https://github.com/OpenRefine/OpenRefine/issues/6697
+      state: published
+      notes: Existing upstream issue; no Spare Tokens artifact has been posted.
+artifacts: []
+files:
+  context: context.md
+  verification: verify.md
+  prompts:
+    codex: prompts/codex.md
+    claude: prompts/claude.md
+    gemini: prompts/gemini.md
+origin:
+  type: github-issue
+  source_id: openrefine-good-first-issue
+  repository: OpenRefine/OpenRefine
+  issue_number: 6697
+  issue_url: https://github.com/OpenRefine/OpenRefine/issues/6697
+  labels:
+    - "Type: Feature Request"
+    - "Theme: UX/Usability"
+    - Good First Issue
+    - reconciliation
+  signal_labels:
+    - Good First Issue
+  imported_at: 2026-06-11

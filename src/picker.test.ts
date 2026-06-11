@@ -91,6 +91,56 @@ describe("picker", () => {
     expect(output).toContain("1. first-task");
     expect(output).toContain("spare pick --target codex --select 1");
   });
+
+  it("boosts imported maintainer-signaled GitHub issues", () => {
+    const ranked = rankOpenTasks([
+      task("plain-health-task", {
+        cause_area: "health",
+      }),
+      task("github-science-task", {
+        cause_area: "science",
+        origin: {
+          type: "github-issue",
+          source_id: "example-source",
+          repository: "example/project",
+          issue_number: 42,
+          issue_url: "https://github.com/example/project/issues/42",
+          labels: ["help wanted"],
+          signal_labels: ["help wanted"],
+          imported_at: "2026-06-11",
+        },
+      }),
+    ]);
+
+    expect(ranked[0].task.packet.id).toBe("github-science-task");
+    expect(ranked[0].reasons).toContain("maintainer-signaled GitHub issue");
+    expect(formatPickList(ranked, { target: "codex", limit: 1 })).toContain(
+      "Source: GitHub example/project#42",
+    );
+  });
+
+  it("penalizes imported issues with broad or hard labels", () => {
+    const ranked = rankOpenTasks([
+      task("plain-science-task", {
+        cause_area: "science",
+      }),
+      task("hard-github-task", {
+        cause_area: "science",
+        origin: {
+          type: "github-issue",
+          repository: "example/project",
+          issue_number: 42,
+          issue_url: "https://github.com/example/project/issues/42",
+          labels: ["help wanted", "Hard", "Meta-issue"],
+          signal_labels: ["help wanted"],
+          imported_at: "2026-06-11",
+        },
+      }),
+    ]);
+
+    expect(ranked[0].task.packet.id).toBe("plain-science-task");
+    expect(ranked[1].reasons).toContain("broad or hard upstream label");
+  });
 });
 
 function task(
@@ -101,6 +151,7 @@ function task(
     verification?: Partial<TaskPacket["verification"]>;
     risk?: Partial<TaskPacket["risk"]>;
     lifecycle?: Partial<TaskPacket["lifecycle"]>;
+    origin?: TaskPacket["origin"];
   } = {},
 ): LoadedTask {
   const packet = TaskPacketSchema.parse({
@@ -156,6 +207,7 @@ function task(
         gemini: "prompts/gemini.md",
       },
     },
+    origin: overrides.origin,
   });
 
   return {
